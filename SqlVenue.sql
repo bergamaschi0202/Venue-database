@@ -6,6 +6,8 @@ CREATE TABLE TBL_LOCAL(
     nome VARCHAR(100) NOT NULL,
     descricao TEXT,
     categoria VARCHAR(50),
+	foto_local VARCHAR(255) NOT NULL,
+	foto_feed VARCHAR(255),
     
     -- Endereço
     cep VARCHAR(10),
@@ -25,7 +27,7 @@ CREATE TABLE TBL_LOCAL(
 
 	-- Serviços
 	id_servico BIGINT NOT NULL,
-    FOREIGN KEY (id_dono) REFERENCES TBL_SERVICO(id),
+    FOREIGN KEY (id_servico) REFERENCES TBL_SERVICO(id),
 
 	-- Reserva
 	id_reserva BIGINT NOT NULL,
@@ -48,26 +50,31 @@ CREATE TABLE TBL_RESERVA(
 	horario_inicio TIME NOT NULL,
 	horario_termino TIME NOT NULL,
 	data_reserva DATE,
-	id_plano BIGINT,
-	FOREIGN KEY (id_plano) REFERENCES TBL_PLANO(id)
+
+	-- Serviços
+	id_servico BIGINT NOT NULL,
+    FOREIGN KEY (id_servico) REFERENCES TBL_SERVICO(id),
+	id_servico_escolhido BIGINT NOT NULL,
+	FOREIGN KEY (id_servico_escolhido) REFERENCES TBL_SERVICO_ESCOLHIDO(id_servico_escolhido),
+
+	preco DECIMAL,
+
+	-- Disponibilidade
+	disponivel BIT DEFAULT 1
 );
 
 CREATE TABLE TBL_SERVICO(
 	id BIGINT PRIMARY KEY IDENTITY,
 	nome VARCHAR(100) NOT NULL,
-	descricao TEXT
+	descricao TEXT,
+	foto VARCHAR(255),
+	preco DECIMAL
 );
 
-CREATE TABLE TBL_PLANO(
-	id BIGINT PRIMARY KEY IDENTITY,
-	
-);
-
-CREATE TABLE TBL_CONTRATO(
-	id BIGINT PRIMARY KEY IDENTITY,
-	status_contrato BIT DEFAULT 1,
-
-	-- Cliente
+CREATE TABLE TBL_SERVICO_ESCOLHIDO(
+	id_servico_escolhido BIGINT NOT NULL,
+	PRIMARY KEY (id_servico_escolhido),
+    FOREIGN KEY (id_servico_escolhido) REFERENCES TBL_SERVICO(id),
 );
 
 CREATE TABLE TBL_USUARIO(
@@ -87,16 +94,32 @@ CREATE TABLE TBL_USUARIO(
     complemento VARCHAR(50),
     bairro VARCHAR(50),
     cidade VARCHAR(50),
-    estado CHAR(2),
-    
-    -- Avaliação
-    nota_media DECIMAL(3,2) DEFAULT 5.00,
-    total_avaliacoes INT DEFAULT 0,
+    estado CHAR(2)
 );
 
 CREATE TABLE TBL_USUARIO_PERFIL (
     id_usuario BIGINT,
     perfil VARCHAR(20),
-    PRIMARY KEY (id_usuario),
+    PRIMARY KEY (id_usuario, perfil),
     FOREIGN KEY (id_usuario) REFERENCES TBL_USUARIO(id)
+);
+
+CREATE TABLE TBL_CONTRATO(
+	id BIGINT PRIMARY KEY IDENTITY,
+	status_contrato BIT DEFAULT 0,
+
+	-- Cliente
+	id_cliente BIGINT,
+	FOREIGN KEY (id_dono) REFERENCES TBL_USUARIO(id),
+
+	-- Dono
+	id_dono BIGINT,
+	FOREIGN KEY (id_dono) REFERENCES TBL_USUARIO(id),
+
+	-- Reserva
+	id_reserva BIGINT,
+	FOREIGN KEY (id_reserva) REFERENCES TBL_RESERVA(id),
+
+	-- Informações
+	preco DECIMAL
 );
