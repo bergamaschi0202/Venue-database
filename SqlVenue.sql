@@ -49,8 +49,8 @@ CREATE TABLE TBL_LOCAL(
     capacidade_maxima INT NOT NULL,
     
     -- Dono
-    id_dono BIGINT NOT NULL,
-    FOREIGN KEY (id_dono) REFERENCES TBL_USUARIO(id),
+    id_usuario_dono BIGINT NOT NULL,
+    FOREIGN KEY (id_usuario_dono) REFERENCES TBL_USUARIO(id),
     
     -- Metadados
     data_cadastro DATETIME DEFAULT GETDATE(),
@@ -72,7 +72,7 @@ CREATE TABLE TBL_SERVICO(
 
 CREATE TABLE TBL_LOCAL_SERVICO (
 	id_local BIGINT,
-	id_servico BIGINT
+	id_servico BIGINT,
 	PRIMARY KEY (id_local, id_servico),
 	FOREIGN KEY (id_local) REFERENCES TBL_LOCAL(id),
 	FOREIGN KEY (id_servico) REFERENCES TBL_SERVICO(id)
@@ -88,14 +88,14 @@ CREATE TABLE TBL_RESERVA(
 	preco DECIMAL(10,2) NOT NULL,
 
 	-- DISPONÍVEL, RESERVADA, REALIZADA
-	status_reserva VARCHAR(30) NOT NULL
+	status_reserva VARCHAR(30) NOT NULL,
 
 	FOREIGN KEY (id_local) REFERENCES TBL_LOCAL(id)
 );
 
 CREATE TABLE TBL_RESERVA_SERVICO(
 	id_reserva BIGINT,
-	id_servico BIGINT
+	id_servico BIGINT,
 	PRIMARY KEY (id_reserva, id_servico),
 	FOREIGN KEY (id_reserva) REFERENCES TBL_RESERVA(id),
 	FOREIGN KEY (id_servico) REFERENCES TBL_SERVICO(id)
@@ -125,7 +125,7 @@ CREATE TABLE TBL_CONTRATO(
 
 CREATE TABLE TBL_CONTRATO_SERVICO(
 	id_contrato BIGINT,
-	id_servico BIGINT
+	id_servico BIGINT,
 	PRIMARY KEY (id_contrato, id_servico),
 	FOREIGN KEY (id_contrato) REFERENCES TBL_CONTRATO(id),
 	FOREIGN KEY (id_servico) REFERENCES TBL_SERVICO(id)
