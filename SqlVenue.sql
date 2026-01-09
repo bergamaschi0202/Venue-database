@@ -34,7 +34,6 @@ CREATE TABLE TBL_LOCAL(
     descricao TEXT,
     categoria VARCHAR(50) NOT NULL,
 	foto_local VARCHAR(255) NOT NULL,
-	foto_feed VARCHAR(255),
     
     -- Endereço
     cep VARCHAR(10) NOT NULL,
@@ -60,6 +59,13 @@ CREATE TABLE TBL_LOCAL(
     nota_media DECIMAL(3,2) DEFAULT 0.00,
     total_avaliacoes INT DEFAULT 0,
     total_reservas INT DEFAULT 0
+);
+
+CREATE TABLE TBL_FOTO_FEED(
+	id BIGINT PRIMARY KEY IDENTITY,
+	foto VARCHAR(255),
+	id_local BIGINT NOT NULL,
+	FOREIGN KEY (id_local) REFERENCES TBL_LOCAL(id)
 );
 
 CREATE TABLE TBL_SERVICO(
