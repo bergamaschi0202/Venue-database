@@ -94,17 +94,43 @@ CREATE TABLE TBL_SERVICO(
 
 CREATE TABLE TBL_RESERVA(
 	id BIGINT PRIMARY KEY IDENTITY,
+
 	id_local BIGINT NOT NULL,
+	FOREIGN KEY (id_local) REFERENCES TBL_LOCAL(id),
+
 	tipo_reserva VARCHAR(10) NOT NULL,
-	horario_inicio TIME NOT NULL,
-	horario_termino TIME NOT NULL,
-	data_reserva DATE NOT NULL,
+
+	data_inicio DATE NOT NULL,
+    horario_inicio TIME NOT NULL,
+	data_fim DATE NOT NULL,
+    horario_fim TIME NOT NULL,
+
 	preco DECIMAL(10,2) NOT NULL,
 
 	-- DISPONÍVEL, RESERVADA, REALIZADA
 	status_reserva VARCHAR(30) NOT NULL,
+);
 
-	FOREIGN KEY (id_local) REFERENCES TBL_LOCAL(id)
+CREATE TABLE TBL_DISPONIBILIDADE (
+    id BIGINT PRIMARY KEY IDENTITY,
+    
+    id_local BIGINT NOT NULL,
+    FOREIGN KEY (id_local) REFERENCES TBL_LOCAL(id),
+
+    data_inicio DATE NOT NULL,
+    horario_inicio TIME NOT NULL,
+	data_fim DATE NOT NULL,
+    horario_fim TIME NOT NULL,
+
+    tipo_repeticao VARCHAR(50) NOT NULL,
+    dia_semana INT,           -- 1=Domingo, 7=Sábado
+    dia_mes INT,              -- 1 até 31
+    ordem_semana_mes INT,     -- 1º, 2º, 3º sábado do mês
+
+    validade_repeticao DATE,
+    ativa BIT DEFAULT 1 NOT NULL,
+
+    data_criacao DATETIME DEFAULT GETDATE()
 );
 
 CREATE TABLE TBL_CONTRATO(
