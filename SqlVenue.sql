@@ -130,6 +130,8 @@ CREATE TABLE TBL_DISPONIBILIDADE (
     validade_repeticao DATE,
     ativa BIT DEFAULT 1 NOT NULL,
 
+	status_disponobilidade VARCHAR(30) NOT NULL,
+
     data_criacao DATETIME DEFAULT GETDATE()
 );
 
