@@ -141,7 +141,7 @@ CREATE TABLE TBL_CHAT(
     id BIGINT PRIMARY KEY IDENTITY,
     id_contrato BIGINT NOT NULL UNIQUE,
     data_inicio DATETIME DEFAULT GETDATE(),
-    data_fim DATETIME,
+    data_termino DATETIME,
     ativo BIT DEFAULT 1 NOT NULL,
 
     FOREIGN KEY (id_contrato) REFERENCES TBL_CONTRATO(id)
